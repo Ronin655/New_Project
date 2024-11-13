@@ -13,6 +13,7 @@ class Person extends Model
      * @var array
      */
     protected $fillable = [
+        'id',
         'first_name',
         'last_name',
         'second_name',
@@ -22,5 +23,10 @@ class Person extends Model
         'longitude',
         'date_of_birth',
         'date_of_death',
+    ];
+
+    protected $casts = [
+        'date_of_birth' => 'date',
+        'date_of_death' => 'date',
     ];
 }

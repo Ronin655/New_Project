@@ -12,7 +12,7 @@ class PersonRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,15 +23,15 @@ class PersonRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => ['required|string'],
-            'last_name' => ['required|string'],
-            'second_name' => ['nullable|string|'],
-            'sex' => ['required|string'],
-            'latitude' => ['required|numeric'],
-            'longitude' => ['required|numeric'],
-            'status' => ['required|numeric'],
-            'date_of_birth' => ['required|date'],
-            'date_of_death' => ['nullable|date'],
+            'first_name' => ['required', 'string'],
+            'last_name' => ['required', 'string'],
+            'second_name' => ['nullable', 'string'],
+            'sex' => ['required', 'string'],
+            'latitude' => ['required', 'numeric'],
+            'longitude' => ['required', 'numeric'],
+            'status' => ['required', 'numeric'],
+            'date_of_birth' => ['required', 'date'],
+            'date_of_death' => ['required', 'date'],
         ];
     }
 }

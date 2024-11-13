@@ -1,6 +1,9 @@
 <?php
 
-use App\Http\Controllers\PersonController;
+use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\TagsController;
+use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,5 +21,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::group(['prefix' => 'admin'], function () {
+    Route::get('/', [DashboardController::class, 'index']);
+    Route::resource('categories', CategoriesController::class)->except(['show']);
+    Route::resource('tags', TagsController::class)->except(['show']);
+    Route::resource('users', UsersController::class)->except(['show']);
+});
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

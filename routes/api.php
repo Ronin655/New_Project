@@ -16,5 +16,6 @@ Route::group(['prefix' => 'auth'
     Route::post('register', [RegisterController::class, 'register']);
 });
 
-Route::apiResource('person', PersonController::class)
-->only(['store', 'update', 'destroy'])->middleware('auth:api');
+Route::apiResource('person', PersonController::class);
+
+
