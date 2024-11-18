@@ -4,67 +4,63 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): View
     {
         $users = User::all();
 
         return view('admin.users.index', ['users' => $users]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function create(): View
     {
         return view('admin.users.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:50'],
-            'email' => ['required', 'string', 'email', 'max:50', 'unique:users'],
+        $data = $request->validate([
+            'name' => ['required', 'string'],
+            'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', 'string', 'min:6'],
-            'avatar' => ['nullable', 'image', 'mimes:jpeg,jpg,png', 'max:2048'],
+            'avatar' => ['nullable', 'image'],
         ]);
 
-        User::create($request->all());
+        $user = User::add($data);
+        $user->uploadAvatar($request->file('avatar'));
 
         return redirect()->route('users.index');
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(User $user): View
     {
-        //
+        return view('admin.users.edit', compact('user'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user): RedirectResponse
     {
-        //
+        $data = $request->validate([
+            'name' => ['required', 'string'],
+            'email' => ['required', 'email'],
+            'avatar' => ['nullable', 'image'],
+        ]);
+        $user->edit($data); //Передача валидированных данных
+        $user->uploadAvatar($request->file('avatar'));
+        $user->generatePassword($request->get('password'));
+
+        return redirect()->route('users.index', compact('user'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(User $user): RedirectResponse
     {
-        //
+        $user->delete();
+
+        return redirect()->route('users.index');
     }
 }

@@ -5,8 +5,10 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
@@ -24,7 +26,6 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
     ];
 
     /**
@@ -73,8 +74,15 @@ class User extends Authenticatable
     public function edit($fields)
     {
         $this->fill($fields);
-        $this->password = bcrypt($fields['password']);
         $this->save();
+    }
+
+    public function generatePassword($password)
+    {
+        if ($password != null) {
+            $this->password = bcrypt($password);
+            $this->save();
+        }
     }
 
     public function remove()
@@ -83,26 +91,30 @@ class User extends Authenticatable
         $this->delete();
     }
 
-    public function uploadAvatar($image)
+    public function uploadAvatar(?UploadedFile $image)
     {
         if ($image == null) {
             return;
         }
 
-        Storage::delete('uploads/' . $this->image);
-        $filename = str_random(10) . '.' . $image->extension();
-        $image->saveAs('uploads' . $filename);
-        $this->image = $filename;
+        if ($this->avatar != null) {
+            Storage::delete('uploads/' . $this->avatar);
+        }
+
+        $filename = Str::random(10) . '.' . $image->extension();
+        $image->storeAs('uploads', $filename);
+        $this->avatar = $filename;
         $this->save();
     }
 
     public function getImage()
     {
-        if ($this->image == null) {
-            return '/img/no-user-image.png';
+        if ($this->avatar == null) {
+            return '/img/no-image.png';
         }
 
-        return '/uploads' . $this->inage;
+        return Storage::url('uploads/' . $this->avatar);
+        //return 'uploads/' . $this->avatar;
     }
 
     public function makeAdmin()

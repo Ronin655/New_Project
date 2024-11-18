@@ -87,7 +87,7 @@ class Post extends Model
             return '/img/no-image.png';
         }
 
-        return '/uploads' . $this->inage;
+        return 'uploads/' . $this->inage;
     }
 
     public function setCategory($id)

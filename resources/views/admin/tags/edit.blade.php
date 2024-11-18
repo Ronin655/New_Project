@@ -20,7 +20,7 @@
                     @include('admin.errors')
                 </div>
                 <div class="box-body">
-                    {!! Html::form('PUT', 'route'('tags.update', $tag->id))->open() !!}
+                    {!! Html::form('PUT', route('tags.update', $tag->id))->open() !!}
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Название</label>
