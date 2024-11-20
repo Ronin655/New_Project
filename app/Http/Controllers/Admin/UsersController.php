@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
 {
@@ -47,7 +48,7 @@ class UsersController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string'],
-            'email' => ['required', 'email'],
+            'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
             'avatar' => ['nullable', 'image'],
         ]);
         $user->edit($data); //Передача валидированных данных
@@ -59,7 +60,7 @@ class UsersController extends Controller
 
     public function destroy(User $user): RedirectResponse
     {
-        $user->delete();
+        $user->remove();
 
         return redirect()->route('users.index');
     }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PostsController;
 use App\Http\Controllers\Admin\TagsController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\ProfileController;
@@ -26,6 +27,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::resource('categories', CategoriesController::class)->except(['show']);
     Route::resource('tags', TagsController::class)->except(['show']);
     Route::resource('users', UsersController::class)->except(['show']);
+    Route::resource('posts', PostsController::class)->except(['show']);
 });
 
 require __DIR__ . '/auth.php';

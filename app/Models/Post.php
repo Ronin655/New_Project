@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Post extends Model
 {
@@ -13,9 +15,13 @@ class Post extends Model
     const IS_DRAFT = 0;
 
     const IS_PUBLIC = 1;
+
+
+
     protected $fillable = [
         'title',
         'content',
+        'date',
     ];
 
     public function category()
@@ -45,7 +51,7 @@ class Post extends Model
         ];
     }
 
-    public static function add($fields)
+    public static function add(array $fields)
     {
         $post = new static;
         $post->fill($fields);
@@ -63,9 +69,15 @@ class Post extends Model
 
     public function remove()
     {
-        Storage::delete('uploads/' . $this->image);
-
+        $this->removeImage();
         $this->delete();
+    }
+
+    public function removeImage()
+    {
+        if ($this->image != null) {
+            Storage::delete('uploads/' . $this->image);
+        }
     }
 
     public function uploadImage($image)
@@ -74,13 +86,13 @@ class Post extends Model
             return;
         }
 
-        Storage::delete('uploads/' . $this->image);
-
-        $filename = str_random(10) . '.' . $image->extension();
-        $image->saveAs('uploads' . $filename);
+        $this->removeImage();
+        $filename = Str::random(10) . '.' . $image->extension();
+        $image->storeAS('uploads' . $filename);
         $this->image = $filename;
         $this->save();
     }
+
     public function getImage()
     {
         if ($this->image == null) {
@@ -149,5 +161,11 @@ class Post extends Model
         }
 
         return $this->setFeatured();
+    }
+
+    public function setDateAttribute($value)
+    {
+        $date = Carbon::createFromFormat('m/d/Y', $value)->format('Y-m-d');
+        $this->attributes['date'] = $date;
     }
 }
