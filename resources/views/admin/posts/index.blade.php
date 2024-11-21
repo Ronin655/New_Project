@@ -45,16 +45,16 @@
                         <tbody>
                         @foreach($posts as $post)
                             <tr>
-                                <td>{{$posts->id}}</td>
-                                <td>{{$posts->tittle}}
+                                <td>{{$post->id}}</td>
+                                <td>{{$post->tittle}}
                                 </td>
-                                <td>Обучение</td>
-                                <td>Laravel, PHP</td>
+                                <td>{{$post->getCategoryTitle()}}</td>
+                                <td>{{$post->getTagsTitles()}}</td>
                                 <td>
-                                    <img src="{{$posts->getImage()}}" alt="" width="100">
+                                    <img src="{{$post->getImage()}}" alt="" width="100">
                                 </td>
-                                <td><a href="{{route('posts.edit', $posts->id)}}" class="fa fa-pencil"></a>
-                                    {!! Html::form('DELETE', route('posts.destroy', $posts->id))->open() !!}
+                                <td><a href="{{route('posts.edit', $post->id)}}" class="fa fa-pencil"></a>
+                                    {!! Html::form('DELETE', route('posts.destroy', $post->id))->open() !!}
                                     <button onclick="return confirm('are u sure?')"
                                             type="submit" class="delete">
                                         <a class="fa fa-remove"></a></button>

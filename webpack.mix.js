@@ -32,4 +32,27 @@ mix.copy('resources/admin/dist/fonts', 'public/fonts');
 mix.copy('resources/admin/dist/img', 'public/img');
 
 
+mix.styles([
+    'resources/front/css/bootstrap.min.css',
+    'resources/front/css/font-awesome.min.css',
+    'resources/front/css/animate.min.css',
+    'resources/front/css/owl.carousel.css',
+    'resources/front/css/css/owl.theme.css',
+    'resources/front/css/owl.transitions.css',
+    'resources/front/css/css/style.css',
+    'resources/front/css/css/responsive.css'
+], 'public/css/front.css')
+
+mix.scripts([
+    'resources/front/js/jquery-1.11.3.min.js',
+    'resources/front/js/bootstrap.min.js',
+    'resources/front/js/owl.carousel.min.js',
+    'resources/front/js/jquery.stickit.min.js',
+    'resources/front/js/menu.js',
+    'resources/front/js/scripts.js',
+], 'public.js/front.js')
+
+mix.copy('resources/front/fonts', 'public/fonts');
+mix.copy('resources/front/images', 'public/images');
+
 //'resources/admin/dist/js/scripts.js'

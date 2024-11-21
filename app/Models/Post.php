@@ -17,7 +17,6 @@ class Post extends Model
     const IS_PUBLIC = 1;
 
 
-
     protected $fillable = [
         'title',
         'content',
@@ -26,12 +25,12 @@ class Post extends Model
 
     public function category()
     {
-        return $this->hasOne(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function author()
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function tags()
@@ -99,7 +98,7 @@ class Post extends Model
             return '/img/no-image.png';
         }
 
-        return 'uploads/' . $this->inage;
+        return 'uploads/' . $this->image;
     }
 
     public function setCategory($id)
@@ -139,6 +138,12 @@ class Post extends Model
         $this->save();
     }
 
+    public function setStandart()
+    {
+        $this->is_featured = 0;
+        $this->save();
+    }
+
     public function toggleStatus($value)
     {
         if ($value == null) {
@@ -146,12 +151,6 @@ class Post extends Model
         }
 
         return $this->setPublic();
-    }
-
-    public function setStandart()
-    {
-        $this->is_standart = 0;
-        $this->save();
     }
 
     public function toggleFeatured($value)
@@ -167,5 +166,26 @@ class Post extends Model
     {
         $date = Carbon::createFromFormat('m/d/Y', $value)->format('Y-m-d');
         $this->attributes['date'] = $date;
+    }
+
+    public function getDateAttribute($value)
+    {
+        $date = Carbon::createFromFormat('Y-m-d', $value)->format('d/m/Y');
+
+        return $date;
+    }
+
+    public function getCategoryTitle()
+    {
+//        if ($this->category != null)
+//                ?   $this->category->title
+//                :   'Нет категории';
+    }
+
+    public function getTagsTitles()
+    {
+        return (!$this->tags->isEmpty())
+            ? implode(', ', $this->tags->pluck('title')->all())
+            : 'Нет тегов';
     }
 }

@@ -37,12 +37,14 @@
                         </div>
                         <div class="form-group">
                             <label>Категория</label>
-                            {{ html()->select('category_id', $categories)->class('form-control')->attribute('selected', '') }}
+                            {!!  html()->select('category_id', $categories)
+                               ->class('form-control select 2') !!}
                         </div>
                         <div class="form-group">
                             <label>Теги</label>
-                            {{ html()->select('tags[]', $tags)
-                                ->class('form-control') }}
+                            {!!   html()->multiselect('tags[]',$tags)->class('form-control select2')
+                                ->attribute('data-placeholder', 'Выберите теги')
+                                ->style(['width' => "100%"]) !!}
                         </div>
                         <!-- Date -->
                         <div class="form-group">
@@ -87,7 +89,6 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <button class="btn btn-default">Назад</button>
                     <button class="btn btn-success pull-right">Добавить</button>
                 </div>
                 <!-- /.box-footer-->

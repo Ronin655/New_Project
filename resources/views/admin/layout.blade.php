@@ -6,7 +6,7 @@
     <title>AdminLTE 2 | Blank Page</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="{{asset('/css/admin.css')}}">
     <style>
         table.table form {
             display: inline-block;
@@ -214,28 +214,7 @@
             </form>
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
-            <ul class="sidebar-menu">
-                <li class="header">MAIN NAVIGATION</li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-dashboard"></i> <span>Админ-панель</span>
-                    </a>
-                </li>
-                <li><a href="#"><i class="fa fa-sticky-note-o"></i> <span>Посты</span></a></li>
-                <li><a href="#"><i class="fa fa-list-ul"></i> <span>Категории</span></a></li>
-                <li><a href="#"><i class="fa fa-tags"></i> <span>Теги</span></a></li>
-                <li>
-                    <a href="#">
-                        <i class="fa fa-commenting"></i> <span>Комментарии</span>
-                        <span class="pull-right-container">
-              <small class="label pull-right bg-green">5</small>
-            </span>
-                    </a>
-                </li>
-                <li><a href="#"><i class="fa fa-users"></i> <span>Пользователи</span></a></li>
-                <li><a href="#"><i class="fa fa-user-plus"></i> <span>Подписчики</span></a></li>
-
-            </ul>
+           @include('admin._sidebar')
         </section>
         <!-- /.sidebar -->
     </aside>
@@ -452,6 +431,27 @@
 <!-- ./wrapper -->
 
 <script src="{{asset('js/admin.js')}}"></script>
+<script>
+    $(function () {
+        //Initialize Select2 Elements
+        $(".select2").select2();
+        //Date picker
+        $('#datepicker').datepicker({
+            autoclose: true
+        });
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+    });
+</script>
+<script src="{{asset('/plugins/ckeditor/ckeditor.js')}}"></script>
+<script src="{{asset('/plugins/skfinder/ckfinder.js')}}"></script>
+<script> $(document).ready(function (){
+        var editor = CKEDITOR.replaceAll();
+        CKFinder.setupCKEditor( editor)
+    })</script>
 </body>
 
 </html>
